@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 
 // Get current directory when using ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -28,18 +29,66 @@ class VademecumScraper {
     }
 
     async takeScreenshot(pageNumber) {
+        let tempPath = null;
         try {
             await this.page.waitForSelector('.icon-expand');
             await this.page.click('.icon-expand');
             
             await this.page.setViewport({ width: 1512, height: 945 });
             
+            // Wait for content to load
             await new Promise(resolve => setTimeout(resolve, 2000));
             
+            tempPath = path.join(this.screenshotDir, `temp_${pageNumber}.png`);
+            const finalPath = path.join(this.screenshotDir, `page_${pageNumber}.png`);
+            
             await this.page.screenshot({
-                path: path.join(this.screenshotDir, `page_${pageNumber}.png`),
+                path: tempPath,
                 fullPage: true
             });
+
+            // Process the image with sharp
+            const image = sharp(tempPath);
+            const metadata = await image.metadata();
+            
+            // Calculate dimensions for cropping
+            const trimPercentage = 0.28; // 15% from each side
+            const trimAmount = Math.floor(metadata.width * trimPercentage);
+            const newWidth = metadata.width - (2 * trimAmount);
+
+            console.log(`Processing page ${pageNumber}:`, {
+                originalWidth: metadata.width,
+                originalHeight: metadata.height,
+                trimAmount,
+                newWidth
+            });
+
+            // Validate dimensions
+            if (trimAmount > 0 && newWidth > 0 && metadata.height > 0) {
+                try {
+                    await sharp(tempPath)
+                        .extract({
+                            left: trimAmount,
+                            top: 0,
+                            width: newWidth,
+                            height: metadata.height
+                        })
+                        .toFile(finalPath);
+                    console.log(`Successfully cropped image for page ${pageNumber}`);
+                } catch (cropError) {
+                    console.error(`Error cropping image for page ${pageNumber}:`, cropError);
+                    // If cropping fails, save original
+                    await sharp(tempPath).toFile(finalPath);
+                }
+            } else {
+                console.warn(`Invalid dimensions detected, saving original for page ${pageNumber}`);
+                await sharp(tempPath).toFile(finalPath);
+            }
+
+            // Remove temporary file
+            if (fs.existsSync(tempPath)) {
+                fs.unlinkSync(tempPath);
+            }
             
             console.log(`Screenshot saved for page ${pageNumber}`);
             
@@ -48,6 +97,16 @@ class VademecumScraper {
             await new Promise(resolve => setTimeout(resolve, 1000));
         } catch (error) {
             console.error(`Failed to take screenshot of page ${pageNumber}:`, error);
+            try {
+                if (tempPath && fs.existsSync(tempPath)) {
+                    const finalPath = path.join(this.screenshotDir, `page_${pageNumber}.png`);
+                    await sharp(tempPath).toFile(finalPath);
+                    fs.unlinkSync(tempPath);
+                    console.log(`Saved original image for page ${pageNumber} due to error`);
+                }
+            } catch (saveError) {
+                console.error(`Failed to save original image for page ${pageNumber}:`, saveError);
+            }
         }
     }
 
