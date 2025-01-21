@@ -4,68 +4,29 @@ A web scraper for vademecum.nacr.cz that captures full-page screenshots of docum
 
 ## Requirements
 
-- Windows Subsystem for Linux (WSL2)
+- Node.js and npm (for Puppeteer)
 - Bun runtime
-- Chromium dependencies
+- Chrome/Chromium browser
 
 ## Installation Guide
 
-### 1. Install WSL2 (Windows only)
+### 1. Install Bun
+
 ```powershell
-# Open PowerShell as Administrator and run:
-wsl --install
-```
-Restart your computer after installation.
+# Using PowerShell:
+curl https://bun.sh/install | bash
 
-### 2. Install Bun
-```bash
-# Inside WSL2 terminal:
-curl -fsSL https://bun.sh/install | bash
+# Or using npm:
+npm install -g bun
 ```
 
-### 3. Install Chromium Dependencies (WSL2/Linux)
-```bash
-# Inside WSL2 terminal:
-sudo apt update
-sudo apt install -y ca-certificates \
-    fonts-liberation \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libc6 \
-    libcairo2 \
-    libcups2 \
-    libdbus-1-3 \
-    libexpat1 \
-    libfontconfig1 \
-    libgbm1 \
-    libgcc1 \
-    libglib2.0-0 \
-    libgtk-3-0 \
-    libnspr4 \
-    libnss3 \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libstdc++6 \
-    libx11-6 \
-    libx11-xcb1 \
-    libxcb1 \
-    libxcomposite1 \
-    libxcursor1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxi6 \
-    libxrandr2 \
-    libxrender1 \
-    libxss1 \
-    libxtst6 \
-    lsb-release \
-    wget \
-    xdg-utils
-```
+### 2. Install Chrome
 
-### 4. Clone and Setup Project
+If you don't have Chrome installed, download and install it from:
+`https://www.google.com/chrome/`
+
+### 3. Clone and Setup Project
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/uhlar-pup.git
@@ -83,6 +44,7 @@ bun install
    - Adjust the page count in `scrapePages(401, startUrl)` if needed
 
 2. Run the scraper:
+
 ```bash
 bun run index.ts
 ```
@@ -104,10 +66,10 @@ Screenshots are saved as PNG files named `page_1.png`, `page_2.png`, etc.
 
 If you encounter any issues:
 
-1. Make sure all Chromium dependencies are installed
-2. Check that WSL2 is properly configured (Windows users)
-3. Verify your internet connection
-4. Ensure you have sufficient disk space for screenshots
+1. Make sure Chrome is installed
+2. Verify your internet connection
+3. Ensure you have sufficient disk space for screenshots
+4. If you get permission errors, try running the terminal as administrator
 
 ## Notes
 
