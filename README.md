@@ -1,4 +1,4 @@
-# uhlar-pup
+# vademecum scraper
 
 A web scraper for vademecum.nacr.cz that captures full-page screenshots of documents.
 
