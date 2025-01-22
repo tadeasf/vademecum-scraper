@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
+    "dev": "node src/index.js --dev",
     "help": "node src/index.js --help",
     "vademecum": "node src/index.js vademecum",
     "vychodoceskearchivy": "node src/index.js vychodoceskearchivy",
@@ -15,8 +16,10 @@
   "dependencies": {
     "axios": "^1.7.9",
     "chalk": "^5.4.1",
+    "inquirer": "^9.2.16",
     "puppeteer": "^24.1.0",
     "sharp": "^0.33.5",
+    "winston": "^3.12.0",
     "yargs": "^17.7.2"
   }
 }
