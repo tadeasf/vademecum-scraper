@@ -1,8 +1,8 @@
 import { BaseScraper } from './baseScraper.js';
 
-class VychodoCeskeArchivyScraper extends BaseScraper {
-    constructor() {
-        super('vychodoceskearchivy');
+export class VychodoCeskeArchivyScraper extends BaseScraper {
+    constructor(options = {}) {
+        super('vychodoceskearchivy', options);
     }
 
     async downloadPage(pageNumber) {

@@ -4,8 +4,8 @@ import fs from 'fs';
 import path from 'path';
 
 export class VademecumScraper extends BaseScraper {
-    constructor() {
-        super('vademecum');
+    constructor(options = {}) {
+        super('vademecum', options);
     }
 
     async downloadPage(pageNumber) {
