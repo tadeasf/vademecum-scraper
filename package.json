@@ -5,13 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node src/index.js --dev",
-    "help": "node src/index.js --help",
-    "vademecum": "node src/index.js vademecum",
-    "vychodoceskearchivy": "node src/index.js vychodoceskearchivy",
-    "portafontium": "node src/index.js portafontium",
-    "mza": "node src/index.js mza",
-    "ceskearchivy": "node src/index.js ceskearchivy",
-    "ebadatelna": "node src/index.js ebadatelna"
+    "help": "node src/index.js --help"
   },
   "dependencies": {
     "axios": "^1.7.9",
