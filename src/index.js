@@ -23,18 +23,31 @@ async function main() {
             type: 'string',
             description: 'Custom output directory'
         })
+        .option('debug', {
+            type: 'boolean',
+            description: 'Run in debug mode (browser visible)',
+            default: false
+        })
+        .strict() // This ensures we error on unknown arguments
         .argv;
 
     if (argv.help) {
         HelpCommand.showHelp();
-        return;
+        process.exit(0);
     }
 
-    const scraperType = argv._[0] || 'vademecum';
+    const scraperType = argv._[0];
+    if (!scraperType) {
+        PromptUtils.error('No scraper type specified');
+        HelpCommand.showHelp();
+        process.exit(1);
+    }
+
     const options = {
         pages: argv.pages,
         startUrl: argv['start-url'],
-        outputDir: argv.output
+        outputDir: argv.output,
+        headless: !argv.debug
     };
 
     let scraper;
@@ -49,17 +62,20 @@ async function main() {
         default:
             PromptUtils.error(`Unknown scraper type: ${scraperType}`);
             HelpCommand.showHelp();
-            return;
+            process.exit(1);
     }
 
-    if (scraper) {
-        try {
-            await scraper.run();
-            PromptUtils.success('Scraping completed successfully!');
-        } catch (error) {
-            PromptUtils.error(`Scraping failed: ${error.message}`);
-        }
+    try {
+        await scraper.run();
+        PromptUtils.success('Scraping completed successfully!');
+        process.exit(0);
+    } catch (error) {
+        PromptUtils.error(`Scraping failed: ${error.message}`);
+        process.exit(1);
     }
 }
 
-main();
+main().catch(error => {
+    PromptUtils.error(`Unexpected error: ${error.message}`);
+    process.exit(1);
+});

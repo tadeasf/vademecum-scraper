@@ -21,10 +21,12 @@ ${chalk.bold('Options:')}
 --pages=<number>     Number of pages to scrape
 --start-url=<url>    Starting URL for scraping
 --output=<path>      Custom output directory
+--debug             Run in debug mode (browser visible)
 
 ${chalk.bold('Examples:')}
 npm run start vademecum --pages=100
 npm run start vychodoceskearchivy --start-url="https://example.com"
+npm run start vademecum --debug
 `;
         console.log(help);
     }

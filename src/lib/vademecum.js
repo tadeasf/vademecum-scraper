@@ -130,6 +130,10 @@ export class VademecumScraper extends BaseScraper {
             await this.close();
         }
     }
+
+    async run() {
+        await this.scrapePages(this.options.pages, this.options.startUrl);
+    }
 }
 
 // Main execution
