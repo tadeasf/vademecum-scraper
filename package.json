@@ -3,7 +3,13 @@
   "module": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "vademecum": "node src/lib/vademecum.js",
+    "vychodoceskearchivy": "node src/lib/vychodoceskearchivy.js",
+    "portafontium": "node src/lib/portafontium.js",
+    "mza": "node src/lib/mza.js",
+    "ceskearchivy": "node src/lib/ceskearchivy.js",
+    "ebadatelna": "node src/lib/ebadatelna.js"
   },
   "dependencies": {
     "axios": "^1.7.9",
