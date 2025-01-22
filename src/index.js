@@ -37,15 +37,18 @@ async function promptOptions(scraperType) {
       type: 'input',
       name: 'startUrl',
       message: 'Starting URL (optional):',
+      default: '',
     },
     {
       type: 'input',
       name: 'output',
       message: 'Custom output directory (optional):',
+      default: '',
     },
   ];
 
   const answers = await inquirer.prompt(questions);
+
   return {
     pages: parseInt(answers.pages),
     startUrl: answers.startUrl || null,
@@ -64,7 +67,7 @@ async function main() {
     const scraperType = await promptScraper();
     const options = await promptOptions(scraperType);
 
-    logger.info(`Starting ${scraperType} scraper`, options);
+    logger.info(`Starting ${scraperType} scraper with options:`, options);
 
     const ScraperClass = SCRAPERS[scraperType];
     const scraper = new ScraperClass(options);
@@ -79,4 +82,7 @@ async function main() {
   }
 }
 
-main();
+// Only run if this is the main module
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
